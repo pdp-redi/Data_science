@@ -1,2 +1,2 @@
 # Data_science
-This is to submit all assignment 
+This is to submit all assignments
