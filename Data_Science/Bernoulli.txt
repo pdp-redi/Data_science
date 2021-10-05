@@ -1,0 +1,55 @@
+Equations
+F$ = 'water'
+p_amb = 101.325 [kPa]
+T_W = 20[C]
+p[1] = p_amb
+ 
+rho_W = density(F$,P=p_amb,T=T_W)
+DELTAh = 2 [m]
+h[2] = 0[m]
+g=9.81 [m/s^2]
+c[1] = 0 [m/s]
+p[2] = p_amb
+ 
+"! the '\' is noted as a normal letter, that's mean 'k\d'  is the variable name"
+k\d = 0.001 					"it's the relative roughness"
+ 
+ 
+Duplicate i=1,2 
+	p_tot[i] = p[i] *convert(kPa,Pa) + rho_W/2 *c[i]^2 + rho_w * g *h[i]
+End
+ 
+{p_tot[1] = p[1] *convert(kPa,Pa) + rho_W/2 *c[1]^2 + rho_w * g *h[1]
+p_tot[2] = p[2] *convert(kPa,Pa) + rho_W/2 *c[2]^2 + rho_w * g *h[2]}
+ 
+h[1] - h[2] = DELTAh
+ 
+ 
+ 
+p_tot[1] - DELTAp_L = p_tot[2]
+DELTAp_L = DELTAp_L_p + DELTAp_L_f
+DELTAp_L_f = rho_W/2 * c_p^2 *zeta_D
+$varinfo c_p units='m/s' lower=0
+$varinfo c[2] units='m/s' lower=0
+$varinfo Re units='' lower=0
+{! index: 
+L ... losses
+p ... pipe
+f ... fixtures
+}
+DELTAp_L_p = rho_W/2 * c_p^2 *lambda *l_p/(d_p * convert(mm,m))
+l_p = 5[m]
+lambda = moodychart(Re, k\d)
+ 
+ 
+V_dot = c_p *A_p
+V_dot = c[2] * A[2]
+A[2] = PI/4 *d[2]^2 *convert(mm^2,m^2)
+d[2] = 5[mm]
+Re = rho_W *c_p * d_p*convert(mm,m) / mu_W
+mu_W =viscosity(F$,T=T_W,P=p_amb)
+Call pipedimensions(DN, DELTAs$: d_p_o, d_p, DELTAs, A_p)
+DN=20 [mm]
+DELTAs$ ='10'
+zeta_D=k_sudden_contraction(d_p*convert(mm,m),d[2]*convert(mm,m))
+ 
